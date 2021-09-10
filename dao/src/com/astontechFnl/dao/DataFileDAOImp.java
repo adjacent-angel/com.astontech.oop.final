@@ -32,16 +32,17 @@ public class DataFileDAOImp extends MySQL implements DataFileDAO {
         return dataFile;
     }
 
-    @Override
-    public List<DataFile> getFileList() {
+
+    public List<DataFile> getFileTypeList(String fileExt) {
         Connect();
         List<DataFile> fileList = new ArrayList<DataFile>();
         try {
-            String sp = "{call GetFile(?,?)}";
+            String sp = "{call GetFile(?,?,?)}";
             CallableStatement cStmt = connection.prepareCall(sp);
 
             cStmt.setInt(1,GET_COLLECTION);
             cStmt.setInt(2, 0);
+            cStmt.setString(3, fileExt);
             ResultSet rs = cStmt.executeQuery();
 
             while(rs.next()) {
@@ -106,7 +107,7 @@ public class DataFileDAOImp extends MySQL implements DataFileDAO {
     }
 
     @Override
-    public boolean updateDirectory(DataFile dataFile) {
+    public boolean updateDataFile(DataFile dataFile) {
         Connect();
         int id = 0;
         try {
@@ -135,7 +136,7 @@ public class DataFileDAOImp extends MySQL implements DataFileDAO {
     }
 
     @Override
-    public boolean deleteDirectory(int fileId) {
+    public boolean deleteDataFile(int fileId) {
         Connect();
         int id = 0;
         try {

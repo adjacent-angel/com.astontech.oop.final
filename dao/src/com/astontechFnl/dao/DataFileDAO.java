@@ -7,13 +7,13 @@ import java.util.List;
 public interface DataFileDAO {
     // region GET METHODS
     public DataFile getFileById(int fileId);
-    public List<DataFile> getFileList();
+    public List<DataFile> getFileTypeList(String fileExt);
     public List<DataFile> getFiveLargest();
     // endregion
 
     //region METHODS
     public int insertFile(DataFile dataFile);
-    public boolean updateDirectory(DataFile dataFile);
-    public boolean deleteDirectory(int fileId);
+    public boolean updateDataFile(DataFile dataFile);
+    public boolean deleteDataFile(int fileId);
     // endregion
 }

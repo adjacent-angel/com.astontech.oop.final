@@ -31,7 +31,7 @@ public abstract class MySQL {
 
 
     protected static final int Largest_Files = 30;
-    protected static final int Truncate = 40;
+    protected static final int Truncate = 50;
 
 
     // endregion

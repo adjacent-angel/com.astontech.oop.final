@@ -6,12 +6,9 @@ import com.astontechFnl.dao.DataFileDAO;
 import com.astontechFnl.dao.DataFileDAOImp;
 import com.astontechFnl.dao.DirectoryDAO;
 import com.astontechFnl.dao.DirectoryDAOImp;
-import com.astontechFnl.dao.mysql.MySQL;
 import org.apache.log4j.Logger;
 
 import java.io.File;
-import java.sql.CallableStatement;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -24,11 +21,8 @@ public class Main {
         Menu();
     }
 
-
-
         public static void Menu() {
             boolean flag1 = true;
-            boolean flag2 = true;
 
             while(flag1) {
                 Scanner read = new Scanner(System.in);
@@ -37,6 +31,7 @@ public class Main {
 
                 filler(new java.io.File(dir));
 
+                boolean flag2 = true;
 
                 while (flag2) {
                     Scanner reader2 = new Scanner(System.in);
@@ -69,25 +64,35 @@ public class Main {
                         List<DataFile> dataFileList = dataFileDAO.getFiveLargest();
                         System.out.println("5 biggest files: \n");
                         for (DataFile dataFile : dataFileList) {
-                            System.out.println("File Name: " + dataFile.getFileName() + "\n" + "   File size: " + dataFile.getFileSize() + "\n");
+                            System.out.println("File Name: " + dataFile.getFileName() + "\n" + "   File size: " + dataFile.getFileSize());
                             System.out.println("==== ==== ==== ===");
                         }
+                    } else if (menuChoice == 4) {
+                        System.out.println("Enter file type: ");
+                        Scanner reader3 = new Scanner(System.in);
+                        String fileType = reader3.nextLine();
+                        List<DataFile> fType = dataFileDAO.getFileTypeList(fileType);
+                        for(DataFile dataFile : fType) {
+                                System.out.println("File matches type: " + fileType+ "\n"
+                                                    + " --File Name: " + dataFile.getFileName());
+                        }
+                    } else if (menuChoice == 5) {
+                        System.out.println("<<<<<<<<<<<>>>>>>>>>>>");
+                        System.out.println("Clearing Database...");
+                        System.out.println("<<<<<<<<<<<>>>>>>>>>>>");
+                        System.out.println("Returning to Main menu...");
+                        System.out.println("<<<<<<<<<<<>>>>>>>>>>>");
+                        Directory d = directoryDAO.truncate();
 
+                        flag1 = true;
+                        flag2 = false;
+                    } else {
+                        System.exit(0);
                     }
-//                    else if (menuChoice == 4) {
-//                        System.out.println("Enter file type: ");
-//                        Scanner reader3 = new Scanner(System.in);
-//                        String fileType = reader3.nextLine();
-//
-//                        System.out.println("Files of file type " + type);
 
-                    }
                 }
             }
-
-
-        }
-
+    }
 
     public static void filler(java.io.File dir) {
         try {
@@ -106,28 +111,22 @@ public class Main {
                     int dirId = directoryDAO.insertDirectory(directory);
 
                     filler(file);
-
                 } else {
-
                     DataFile dataFile = new DataFile();
                     dataFile.setFileId(0);
                     dataFile.setFileName(file.getName());
                     dataFile.setFileType(file.getPath().substring(file.getPath().lastIndexOf(".") + 1));
                     dataFile.setFileSize(file.length());
                     dataFile.setPath(file.getPath());
-//                    dataFile.setDirId(file.);
 
                     DataFileDAO dataFileDAO = new DataFileDAOImp();
                     int fileId = dataFileDAO.insertFile(dataFile);
                 }
+
             }
         } catch (Exception ioEx) {
             logger.error(ioEx);
         }
-
     }
-
-
-
 }
 

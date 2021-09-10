@@ -156,6 +156,28 @@ public class DirectoryDAOImp extends MySQL implements DirectoryDAO {
         }
         return id > 0;
     }
+    public Directory truncate() {
+        Connect();
+        Directory directory = null;
+        try {
+            String sp = "{call GetDirectory(?,?)}";
+            CallableStatement cStmt = connection.prepareCall(sp);
+
+            cStmt.setInt(1,Truncate);
+            cStmt.setInt(2, 0);
+            ResultSet rs = cStmt.executeQuery();
+
+            while(rs.next()) {
+
+                directory = (HydrateObject(rs));
+            }
+            connection.close();
+        } catch (SQLException sqlEx) {
+            logger.error(sqlEx);
+        }
+        return directory;
+    }
+
 
     @Override
     public boolean deleteDirectory(int directoryId) {
